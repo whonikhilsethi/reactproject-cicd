@@ -1,0 +1,53 @@
+name: "React Project Cd Workflow"
+
+on:
+  workflow_run: 
+    workflows: ["React Project Ci Workflow"]
+    types:
+      - completed
+
+  workflow_dispatch:
+
+
+jobs:
+  Deployment:
+  runs-on: ubuntu-latest
+  steps:
+    - name: "setting up node js"
+      uses: actions/setup-node@v5
+      with:
+        node-version: '21'
+    
+
+    - name: "Installing vercel cli"
+      run: npm install -g vercel
+
+
+
+    - name: "Download Artifacts"
+      uses: actions/download-artifact@v5
+      with:
+        name: Build
+        github-token: ${{ github.token }}
+        run-id: ${{ github.event.workflow_run.id }}
+
+
+    - name: "Deployment"
+      run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --confirm --name=cicdproduction
+
+
+
+    - name : "Email Sending"
+      uses: betterfor/action-sned-mail@main
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{secrets.MAIL_USERNAME}}
+        password: ${{secrets.MAIL_PASSWORD}}
+        subject: Github Actions job results
+        to: nikhilsethi6676@gmail.com
+        from: nikhilsethi2k3@gmail.com
+        body: Build job of ${{ github.repository }} completed successfully!
+        
+
+  
