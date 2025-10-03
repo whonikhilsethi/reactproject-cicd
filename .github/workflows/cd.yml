@@ -38,7 +38,7 @@ jobs:
 
 
       - name : "Email Sending"
-        uses: betterfor/action-sned-mail@main
+        uses: betterfor/action-send-mail@main
         with:
           server_address: smtp.gmail.com
           server_port: 465
