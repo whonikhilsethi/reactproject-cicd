@@ -1,7 +1,7 @@
 name: "React Project Ci Workflow"
 
 on:
-  push: [main]
+  push: [ main ]
 
 
 jobs:
